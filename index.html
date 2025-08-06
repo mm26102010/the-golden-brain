@@ -413,21 +413,6 @@ body.dark-mode header {
     function closePopup() {
       document.getElementById("popup").style.display = "none";
     }
-
-</script>
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>العقل الذهبي - سؤال واحد</title>
-</head>
-<body>
-
-
-
- 
-</script>
-
 <script>
 let score = 0;
 let coins = 0;
@@ -446,7 +431,65 @@ function resetGame() {
   clearInterval(timer); // إيقاف المؤقت إذا كان شغال
   // أي متغيرات أخرى أعد ضبطها هنا
 }
+optionsContainer.innerHTML = "";
+question.options.forEach(option => {
+  const button = document.createElement("button");
+  button.textContent = option;
+  button.classList.add("option-button");
+  
+  button.addEventListener("click", () => {
+    // تعطيل كل الأزرار
+    const allButtons = document.querySelectorAll(".option-button");
+    allButtons.forEach(btn => btn.disabled = true);
+
+    if (option === question.answer) {
+      button.style.backgroundColor = "green";
+      score++;
+      coins += 5;
+    } else {
+      button.style.backgroundColor = "red";
+      // تلوين الزر الصحيح بالأخضر
+      const correctButton = [...allButtons].find(btn => btn.textContent === question.answer);
+      if (correctButton) correctButton.style.backgroundColor = "green";
+    }
+
+    // تحديث النقاط والعملات
+    document.getElementById("score").textContent = score;
+    document.getElementById("coins").textContent = coins;
+
+    // الانتقال للسؤال التالي بعد مهلة
+    setTimeout(() => {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        showQuestion();
+      } else {
+        endGame();
+      }
+    }, 1500); // 1.5 ثانية
+  });
+
+  optionsContainer.appendChild(button);
+});
+.option-button {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.option-button:hover {
+  background-color: #ddd;
+}
+.option-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+    
 </script>
 
 </body>
 </html>
+
